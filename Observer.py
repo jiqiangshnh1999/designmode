@@ -1,7 +1,8 @@
-#
-# author jiqiang
-# 观察者模式
-#
+"""
+author jiqiang
+观察者模式
+updated_time 2019.6.25
+"""
 
 
 class Subject:
@@ -30,10 +31,11 @@ class HeatWater(Subject):
 
     def setTemperature(self, temperature):
         self.__temperature = temperature
+        self.notify()
 
-    def notify(self, observer):
-        for o in observer:
-            o.notify(self.__temperature)
+    def notify(self):
+        for o in self.getObserver():
+            o.update(self.__temperature)
 
 
 class Observer:
@@ -44,21 +46,21 @@ class Observer:
 
 class WaterMood(Observer):
 
-    def notify(self, temperature):
+    def update(self, temperature):
         if temperature >= 100:
             print("可以喝水了！")
 
 
 class ShowerMood(Observer):
 
-    def notify(self, temperature):
+    def update(self, temperature):
         if temperature > 70:
             print('可以洗澡了！')
 
 
 class TestClass:
 
-    def __init__(self):
+    def __init__(self, t):
         thing = HeatWater()
         water = WaterMood()
         shower = ShowerMood()
@@ -66,12 +68,17 @@ class TestClass:
         thing.addObserver(water)
         thing.addObserver(shower)
 
-        obv = thing.getObserver()
-
-        thing.setTemperature(100)
-
-        thing.notify(obv)
+        thing.setTemperature(t)
 
 
-TestClass()
+while 1:
+
+    try:
+        a = input()
+        a = int(a)
+        TestClass(a)
+
+    except Exception:
+
+        break
 
